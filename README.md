@@ -44,33 +44,33 @@ Deploy the trained chatbot model to a production environment for real-time inter
 
 ## Project Structure
 
-nlp_chatbot/
-├── data/
-│ ├── raw/
-│ ├── processed/
-├── notebooks/
-│ ├── data_preprocessing.ipynb
-│ ├── exploratory_data_analysis.ipynb
-│ ├── feature_engineering.ipynb
-│ ├── model_building.ipynb
-│ ├── transfer_learning_gpt3.ipynb
-│ ├── dialogue_management.ipynb
-│ ├── model_deployment.ipynb
-├── models/
-│ ├── seq2seq_model.h5
-│ ├── transformer_model.h5
-│ ├── gpt3_model.pkl
-├── src/
-│ ├── data_preprocessing.py
-│ ├── exploratory_data_analysis.py
-│ ├── feature_engineering.py
-│ ├── model_building.py
-│ ├── transfer_learning_gpt3.py
-│ ├── dialogue_management.py
-│ ├── model_deployment.py
-├── README.md
-├── requirements.txt
-├── setup.py
+ - nlp_chatbot/
+ - ├── data/
+ - │ ├── raw/
+ - │ ├── processed/
+ - ├── notebooks/
+ - │ ├── data_preprocessing.ipynb
+ - │ ├── exploratory_data_analysis.ipynb
+ - │ ├── feature_engineering.ipynb
+ - │ ├── model_building.ipynb
+ - │ ├── transfer_learning_gpt3.ipynb
+ - │ ├── dialogue_management.ipynb
+ - │ ├── model_deployment.ipynb
+ - ├── models/
+ - │ ├── seq2seq_model.h5
+ - │ ├── transformer_model.h5
+ - │ ├── gpt3_model.pkl
+ - ├── src/
+ - │ ├── data_preprocessing.py
+ - │ ├── exploratory_data_analysis.py
+ - │ ├── feature_engineering.py
+ - │ ├── model_building.py
+ - │ ├── transfer_learning_gpt3.py
+ - │ ├── dialogue_management.py
+ - │ ├── model_deployment.py
+ - ├── README.md
+ - ├── requirements.txt
+ - ├── setup.py
 
 
 ## Getting Started
