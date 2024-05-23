@@ -1,0 +1,92 @@
+# src/data_preprocessing.py
+
+import os
+import pandas as pd
+import numpy as np
+import re
+import nltk
+from nltk.corpus import stopwords
+from sklearn.model_selection import train_test_split
+import pickle
+
+# Download NLTK data
+nltk.download('stopwords')
+nltk.download('punkt')
+
+# Define file paths
+raw_data_path = 'data/raw/customer_queries.csv'
+processed_data_path = 'data/processed/processed_data.pkl'
+
+# Create directories if they don't exist
+os.makedirs(os.path.dirname(processed_data_path), exist_ok=True)
+
+# Load raw data
+print("Loading raw data...")
+data = pd.read_csv(raw_data_path)
+
+# Display the first few rows of the dataset
+print("Raw Data:")
+print(data.head())
+
+# Data Cleaning and Preprocessing
+print("Cleaning and preprocessing data...")
+
+# Define a function for text cleaning
+def clean_text(text):
+    # Lowercase the text
+    text = text.lower()
+    # Remove punctuation and special characters
+    text = re.sub(r'[^\w\s]', '', text)
+    # Remove digits
+    text = re.sub(r'\d+', '', text)
+    # Tokenize the text
+    words = nltk.word_tokenize(text)
+    # Remove stopwords
+    words = [word for word in words if word not in stopwords.words('english')]
+    return ' '.join(words)
+
+# Apply text cleaning to the questions and answers
+data['question_clean'] = data['question'].apply(clean_text)
+data['answer_clean'] = data['answer'].apply(clean_text)
+
+# Display the cleaned data
+print("Cleaned Data:")
+print(data[['question_clean', 'answer_clean']].head())
+
+# Tokenization and Padding
+print("Tokenizing and padding data...")
+
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+# Initialize the tokenizer
+tokenizer = Tokenizer()
+tokenizer.fit_on_texts(data['question_clean'].tolist() + data['answer_clean'].tolist())
+
+# Convert texts to sequences
+question_sequences = tokenizer.texts_to_sequences(data['question_clean'].tolist())
+answer_sequences = tokenizer.texts_to_sequences(data['answer_clean'].tolist())
+
+# Pad sequences
+max_sequence_length = max([len(seq) for seq in question_sequences + answer_sequences])
+question_padded = pad_sequences(question_sequences, maxlen=max_sequence_length, padding='post')
+answer_padded = pad_sequences(answer_sequences, maxlen=max_sequence_length, padding='post')
+
+# Split data into training and test sets
+print("Splitting data into training and test sets...")
+X_train, X_test, y_train, y_test = train_test_split(question_padded, answer_padded, test_size=0.2, random_state=42)
+
+# Save processed data
+print("Saving processed data...")
+processed_data = {
+    'X_train': X_train,
+    'X_test': X_test,
+    'y_train': y_train,
+    'y_test': y_test,
+    'tokenizer': tokenizer,
+    'max_sequence_length': max_sequence_length
+}
+with open(processed_data_path, 'wb') as f:
+    pickle.dump(processed_data, f)
+
+print("Data preprocessing completed!")
